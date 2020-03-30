@@ -13,17 +13,17 @@ window.dataLayer = window.dataLayer || [];
 {%comment%}
 Dynamic remarketing code setup
 {%endcomment%}
-
-<script type = "text/javascript">
-var google_tag_params = {
-ecomm_prodid:[{% for line_item in order.line_items %}'{{ line_item.variant.sku }}'{% unless forloop.last %},{% endunless %}{% endfor %}],
-ecomm_pname:  [{% for line_item in order.line_items %}'{{ line_item.title }}'{% unless forloop.last %},{% endunless %}{% endfor %}],
-ecomm_totalvalue: [{% for line_item in order.line_items %}{{ line_item.price| money_without_currency | remove: ","}}{% unless forloop.last %},{% endunless %}{% endfor %}],  
-ecomm_pagetype: 'purchase',
-user_id: '{{ customer.id }}',
-ecomm_totalvalue: {{ total_price | money_without_currency | remove: "," }}
-};
-</script>
+<script type="text/javascript">
+  var id = new Array();
+{% for line_item in order.line_items %} 
+id.push('{{line_item.variant.sku}}');
+ {% endfor %}
+ var google_tag_params = {
+   ecomm_prodid: id,
+   ecomm_pagetype: 'purchase',
+   ecomm_totalvalue: parseFloat('{{ subtotal_price | money_without_currency | remove: ","}}')
+ };
+  </script>
 
 <script>
 window.dataLayer=window.dataLayer||[];
